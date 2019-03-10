@@ -1,0 +1,17 @@
+﻿@model IEnumerable<User>
+@{
+    ViewData["Title"] = "Users";
+}
+
+<nav class="navbar navbar-light bg-light">
+    <span class="navbar-brand mb-0 h1">Users</span>
+</nav>
+
+<ul class="list-group">
+    @foreach (var user in Model)
+    {
+        <li class="list-group-item">@user.Id</li>
+        <li class="list-group-item">@user.Name</li>
+        <li class="list-group-item">@user.Password</li>
+    }
+</ul>
