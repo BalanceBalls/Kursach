@@ -1,0 +1,5 @@
+C:\Users\Alex\documents\visual studio 2017\Projects\Kursach\Kursach\bin\Debug\netcoreapp2.1\Kursach.deps.json
+C:\Users\Alex\documents\visual studio 2017\Projects\Kursach\Kursach\bin\Debug\netcoreapp2.1\Kursach.runtimeconfig.json
+C:\Users\Alex\documents\visual studio 2017\Projects\Kursach\Kursach\bin\Debug\netcoreapp2.1\Kursach.runtimeconfig.dev.json
+C:\Users\Alex\documents\visual studio 2017\Projects\Kursach\Kursach\obj\Debug\netcoreapp2.1\Kursach.csprojResolveAssemblyReference.cache
+C:\Users\Alex\documents\visual studio 2017\Projects\Kursach\Kursach\obj\Debug\netcoreapp2.1\Kursach.AssemblyInfo.cs

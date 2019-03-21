@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Kursach.Models;
+using Microsoft.AspNetCore.Authorization;
 
 /*Система по ведению учета процесса разработки, включая сроки выполнения,
  * стоимость услуг, этапов разработки (система многопользовательская)*/
@@ -24,13 +25,35 @@ namespace Kursach.Controllers
         }
 
         public IDbConnection Connection => new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+        //<ItemGroup>
+        //  <Compile Remove = "Models\Class.cs" />
+        //  < Compile Remove="Models\Project.cs" />
+        //</ItemGroup>
 
-
+        [Authorize]
         public IActionResult Index()
         {
+            using (var conn = Connection)
+            {
+                var sqlQuery = "SELECT * FROM Projects";
+               
+                conn.Open();
+                var projects = conn.Query<ProjectModel>(sqlQuery);
 
+                foreach (var proj in projects)
+                {
+                    var sql = $"select * from StepsOfDevelopment WHERE ProjectId={proj.Project}";
+                    var steps = conn.Query<StepOfDevelopmentModel>(sql);
+                    proj.Steps = new List<StepOfDevelopmentModel>();
+                    foreach (var st in steps)
+                    {
+                        proj.Steps.Add(st);
+                    }
+                }
+                
 
-            return View();
+                return View(projects);
+            }
         }
 
         public IActionResult GetUsers()
@@ -38,7 +61,7 @@ namespace Kursach.Controllers
             using (var conn = Connection)
             {
                 conn.Open();
-                var users = conn.Query<User>($@"
+                var users = conn.Query<UserModel>($@"
                                         select	id,
                                                 name,
                                                 password
@@ -47,6 +70,8 @@ namespace Kursach.Controllers
                 return View(users);
             }
         }
+
+       
 
         public IActionResult About()
         {
@@ -57,9 +82,19 @@ namespace Kursach.Controllers
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
+            using (var conn = Connection)
+            {
+                conn.Open();
+                var steps = conn.Query<StepOfDevelopmentModel>($@"
+                                        select	StepOfDevelopment,
+                                                Name,
+                                                Description,
+                                                EndDate, 
+                                                ProjectId
+                                        from StepsOfDevelopment
+                                       ");
+                return View(steps);
+            }
         }
 
         public IActionResult Error()

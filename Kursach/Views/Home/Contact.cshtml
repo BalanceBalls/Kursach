@@ -1,17 +1,21 @@
-﻿@{
-    ViewData["Title"] = "Contact";
+﻿@model IEnumerable<StepOfDevelopmentModel>
+@{
+    ViewData["Title"] = "steps";
 }
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<nav class="navbar navbar-light bg-light">
+    <span class="navbar-brand mb-0 h1">Users</span>
+</nav>
 
-<address>
-    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+<ul class="list-group">
+    @foreach (var step in Model)
+    {
+        <ul class="list-group">
+            <li class="list-group-item">@step.StepOfDevelopment</li>
+            <li class="list-group-item">@step.Name</li>
+            <li class="list-group-item">@step.Description</li>
+            <li class="list-group-item">@step.EndDate</li>
+            <li class="list-group-item">@step.ProjectId</li>
+        </ul>
+    }
+       
