@@ -41,15 +41,17 @@ where	Email = @{nameof(email)}
             }
         }
 
-        public void AddUser(RegisterModel model)
+        public int AddUser(RegisterModel model)
         {
             using (var conn = Connection)
             {
                 conn.Open();
-                conn.Execute($@"
-insert Users (Email, Password)
-values (@{nameof(model.Email)}, @{nameof(model.Password)})
-", new { model.Email, model.Password });
+                return conn.ExecuteScalar<int>($@"
+insert Users (Email, Name, Password)
+values (@{nameof(model.Email)}, @{nameof(model.Name)}, @{nameof(model.Password)})
+
+select scope_identity()
+", new { model.Email, model.Name, model.Password });
             }
         }
     }

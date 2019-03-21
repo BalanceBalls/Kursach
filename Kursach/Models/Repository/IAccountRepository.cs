@@ -6,7 +6,7 @@ namespace Kursach.Models.Repository
     {
         UserModel GetUser(LoginModel model);
 
-        void AddUser(RegisterModel model);
+        int AddUser(RegisterModel model);
 
         UserModel GetUserByEmail(string email);
     }

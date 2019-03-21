@@ -9,6 +9,10 @@ namespace Kursach.Models.ViewModels
         public string Email { get; set; }
 
         [StringLength(60, MinimumLength = 4)]
+        [Required(ErrorMessage = "Не указан Name")]
+        public string Name { get; set; }
+
+        [StringLength(60, MinimumLength = 4)]
         [Required(ErrorMessage = "Не указан пароль")]
         public string Password { get; set; }
 

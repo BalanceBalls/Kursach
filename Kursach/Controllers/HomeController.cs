@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Data;
-using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using Dapper;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Kursach.Models;
 using Microsoft.AspNetCore.Authorization;
+using Kursach.Models.Repository;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 /*Система по ведению учета процесса разработки, включая сроки выполнения,
  * стоимость услуг, этапов разработки (система многопользовательская)*/
@@ -16,62 +12,35 @@ namespace Kursach.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IProjectRepository _projectRepository;
 
-        private readonly IConfiguration _config;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HomeController(IConfiguration config)
+        public HomeController(IProjectRepository projectRepository, IHttpContextAccessor httpContextAccessor)
         {
-            _config = config;
+            _projectRepository = projectRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public IDbConnection Connection => new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-        //<ItemGroup>
-        //  <Compile Remove = "Models\Class.cs" />
-        //  < Compile Remove="Models\Project.cs" />
-        //</ItemGroup>
-
-        //[Authorize]
+        [Authorize]
         public IActionResult Index()
         {
-            using (var conn = Connection)
-            {
-                var sqlQuery = "SELECT * FROM Projects";
-               
-                conn.Open();
-                var projects = conn.Query<ProjectModel>(sqlQuery);
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
 
-                foreach (var proj in projects)
+            var projects = _projectRepository.GetProjects(int.Parse(userId));
+
+            foreach (var proj in projects)
+            {
+                proj.Steps = new List<StepOfDevelopmentModel>();
+                var steps = _projectRepository.GetStepsOfDevelopmentByProjectId(proj.Project);
+                foreach (var step in steps)
                 {
-                    var sql = $"select * from StepsOfDevelopment WHERE ProjectId={proj.Project}";
-                    var steps = conn.Query<StepOfDevelopmentModel>(sql);
-                    proj.Steps = new List<StepOfDevelopmentModel>();
-                    foreach (var st in steps)
-                    {
-                        proj.Steps.Add(st);
-                    }
+                    proj.Steps.Add(step);
                 }
-                
-
-                return View(projects);
             }
-        }
 
-        public IActionResult GetUsers()
-        {
-            using (var conn = Connection)
-            {
-                conn.Open();
-                var users = conn.Query<UserModel>($@"
-                                        select	id,
-                                                name,
-                                                password
-                                        from Users
-                                       ");
-                return View(users);
-            }
+            return View(projects);
         }
-
-       
 
         public IActionResult About()
         {
@@ -82,19 +51,7 @@ namespace Kursach.Controllers
 
         public IActionResult Contact()
         {
-            using (var conn = Connection)
-            {
-                conn.Open();
-                var steps = conn.Query<StepOfDevelopmentModel>($@"
-                                        select	StepOfDevelopment,
-                                                Name,
-                                                Description,
-                                                EndDate, 
-                                                ProjectId
-                                        from StepsOfDevelopment
-                                       ");
-                return View(steps);
-            }
+            return NotFound();
         }
 
         public IActionResult Error()

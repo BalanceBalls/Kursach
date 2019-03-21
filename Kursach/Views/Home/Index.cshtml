@@ -8,32 +8,32 @@
 </nav>
 
 
-    @foreach (var project in Model)
-    {<ul class="list-group">
-        
+@foreach (var project in Model)
+{
+    <ul class="list-group">
+
         <li class="list-group-item">ID проекта - @project.Project</li>
         <li class="list-group-item">Имя проекта - @project.ProjectName</li>
         <li class="list-group-item">Стоимость - @project.Cost $</li>
         <li class="list-group-item">Дедлайн - @project.Deadline</li>
-         @if (project.IsDone)
-         {
+        @if (project.IsDone)
+        {
             <li class="list-group-item">Проект завершен - Да</li>
-         }
-         else
-         {
+        }
+        else
+        {
             <li class="list-group-item">Проект завершен - Нет</li>
-         }
-        
+        }
+
         <li class="list-group-item">ID пользователя - @project.UserId</li>
         <br />
-         @foreach (var step in project.Steps)
-         {
-             <ul class="nested">
+        @foreach (var step in project.Steps)
+        {
+            <ul class="nested">
                 <li class="list-group-item">Название этапа - @step.Name</li>
                 <li class="list-group-item">Описание - @step.Description</li>
             </ul>
             <hr />
         }
     </ul>
-         }
-   
+}

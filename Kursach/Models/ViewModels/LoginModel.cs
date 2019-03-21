@@ -6,6 +6,9 @@ namespace Kursach.Models.ViewModels
         [Required(ErrorMessage = "Не указан Email")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Не указан Name")]
+        public string Name { get; set; }
+
         [Required(ErrorMessage = "Не указан пароль")]
         public string Password { get; set; }
     }
