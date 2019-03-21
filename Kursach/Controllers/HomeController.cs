@@ -30,7 +30,7 @@ namespace Kursach.Controllers
         //  < Compile Remove="Models\Project.cs" />
         //</ItemGroup>
 
-        [Authorize]
+        //[Authorize]
         public IActionResult Index()
         {
             using (var conn = Connection)

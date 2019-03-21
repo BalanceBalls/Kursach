@@ -29,7 +29,7 @@ namespace Kursach
             services.AddMvc();
 
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddSingleton<IAccountRepository>();
+            //services.AddSingleton<IAccountRepository, AccountRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
