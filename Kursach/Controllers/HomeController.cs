@@ -25,9 +25,9 @@ namespace Kursach.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;//получаем ID пользователя из куков
 
-            var projects = _projectRepository.GetProjects(int.Parse(userId));
+            var projects = _projectRepository.GetAllProjectsOfUser(int.Parse(userId));
 
             foreach (var proj in projects)
             {
@@ -40,6 +40,12 @@ namespace Kursach.Controllers
             }
 
             return View(projects);
+        }
+
+        public IActionResult UpdateStepStatus(int stepId)
+        {
+            this._projectRepository.UpdateStepOfDevelopmentStatus(stepId);
+            return RedirectToAction("Index","Home");
         }
 
         public IActionResult About()

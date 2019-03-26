@@ -4,7 +4,7 @@
 }
 
 <nav class="navbar navbar-light bg-light">
-    <span class="navbar-brand mb-0 h1">Проекты</span>
+    <span class="navbar-brand mb-0 h1">Количество проектов с вашим участием: <span class="badge badge-primary badge-pill">@Model.Count()</span></span>
 </nav>
 
 
@@ -12,27 +12,45 @@
 {
     <ul class="list-group">
 
-        <li class="list-group-item">ID проекта - @project.Project</li>
-        <li class="list-group-item">Имя проекта - @project.ProjectName</li>
-        <li class="list-group-item">Стоимость - @project.Cost $</li>
-        <li class="list-group-item">Дедлайн - @project.Deadline</li>
+        
+        <li class="list-group-item active"> @project.ProjectName</li>
+        <li class="list-group-item"><b>Стоимость</b> - @project.Cost $</li>
+        <li class="list-group-item"><b>Дедлайн</b> - @project.Deadline</li>
         @if (project.IsDone)
         {
-            <li class="list-group-item">Проект завершен - Да</li>
+            <li class="list-group-item list-group-item-success">Проект завершен</li>
         }
         else
         {
-            <li class="list-group-item">Проект завершен - Нет</li>
+            <li class="list-group-item list-group-item-danger">Проект находится в разработке</li>
         }
 
-        <li class="list-group-item">ID пользователя - @project.UserId</li>
+          
         <br />
         @foreach (var step in project.Steps)
         {
-            <ul class="nested">
-                <li class="list-group-item">Название этапа - @step.Name</li>
-                <li class="list-group-item">Описание - @step.Description</li>
-            </ul>
+        <ul class="nested">
+            <li class="list-group-item list-group-item-info">
+                <b>Этап:</b> @step.Name
+                @if (step.EndDate == DateTime.MinValue)
+                {
+                @using (Html.BeginForm("UpdateStepStatus", "Home", FormMethod.Post))
+                {
+                            <input type="hidden" id="stepID" name="stepId" value=@step.StepOfDevelopment>
+                            <input type="submit" class="btn btn-outline-success" value="Завершить" />
+                }
+                }
+            </li>
+            <li class="list-group-item"><b>Описание:</b> @step.Description</li>
+            @if (step.EndDate != DateTime.MinValue)
+            {
+                <li class="list-group-item list-group-item-success">Этап завершен @step.EndDate</li>
+            }
+            else
+            {
+                <li class="list-group-item list-group-item-danger">Этап в процессе выполнения</li>
+            }
+        </ul>
             <hr />
         }
     </ul>

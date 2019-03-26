@@ -7,5 +7,9 @@ namespace Kursach.Models.Repository
         IEnumerable<ProjectModel> GetProjects(int userId);
 
         IEnumerable<StepOfDevelopmentModel> GetStepsOfDevelopmentByProjectId(int projectId);
+
+        IEnumerable<ProjectModel> GetAllProjectsOfUser(int userId);
+
+        void UpdateStepOfDevelopmentStatus(int stepId);
     }
 }
