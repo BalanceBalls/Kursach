@@ -11,5 +11,19 @@ namespace Kursach.Models.Repository
         IEnumerable<ProjectModel> GetAllProjectsOfUser(int userId);
 
         void UpdateStepOfDevelopmentStatus(int stepId);
+
+        void UpdateProjectStatus(int projectId);
+
+        void WriteNewStep(string Name, string Description, int ProjectId);
+
+        IEnumerable<UserModel> GetUsersInfo();
+
+        IEnumerable<UsersInProjectsModel> GetUsersInProject(int projectId);
+
+        void RemoveUsersFromProject(int projectId);
+
+        void RemoveStep(int stepOfDevelopment);
+
+        void WriteUsersToProject(int projectId, int userId);
     }
 }

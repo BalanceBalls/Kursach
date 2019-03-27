@@ -48,21 +48,53 @@ namespace Kursach.Controllers
             return RedirectToAction("Index","Home");
         }
 
-        public IActionResult About()
+        public IActionResult UpdateProjStatus(int projectId)
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
+            this._projectRepository.UpdateProjectStatus(projectId);
+            return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult Contact()
+        public IActionResult AddUserView(int projectId, string projectName)
         {
-            return NotFound();
+            ViewData["ProjectId"] = projectId;
+            ViewData["ProjectName"] = projectName;
+            ViewData["Users"] = this._projectRepository.GetUsersInfo();
+            ViewData["SubscribedUsers"] = this._projectRepository.GetUsersInProject(projectId);
+
+            return View("AddUserToProject");
+        }
+
+        public IActionResult SubscribeUsersToProject(int projectId, int[] userlist)
+        {
+            this._projectRepository.RemoveUsersFromProject(projectId);
+            foreach (int User in userlist)
+            {
+                this._projectRepository.WriteUsersToProject(projectId, User);
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult RemoveStepFromProject(int stepID)
+        {
+
+            this._projectRepository.RemoveStep(stepID);
+            return RedirectToAction("Index", "Home");
+        }
+        public IActionResult AddStep(int projectId , string projectName)
+        {
+            ViewData["ProjectId"] = projectId;
+            ViewData["ProjectName"] = projectName;
+            return View("AddStepOfDevelopment");
+        }
+        public IActionResult WriteNewStep(string Name, string Description, int ProjectId)
+        {
+            this._projectRepository.WriteNewStep(Name, Description, ProjectId);
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Error()
         {
-            return View();
+            return NotFound();
         }
     }
 }

@@ -31,3 +31,5 @@ C:\Users\Alex\documents\visual studio 2017\Projects\Kursach\Kursach\obj\Debug\ne
 C:\Users\Alex\documents\visual studio 2017\Projects\Kursach\Kursach\obj\Debug\netcoreapp2.1\Kursach.pdb
 C:\Users\Alex\documents\visual studio 2017\Projects\Kursach\Kursach\obj\Debug\netcoreapp2.1\Kursach.csproj.CopyComplete
 C:\Users\Alex\documents\visual studio 2017\Projects\Kursach\Kursach\obj\Debug\netcoreapp2.1\Kursach.csprojAssemblyReference.cache
+C:\Users\Alex\documents\visual studio 2017\Projects\Kursach\Kursach\obj\Debug\netcoreapp2.1\Razor\Views\Home\AddStepOfDevelopment.g.cshtml.cs
+C:\Users\Alex\documents\visual studio 2017\Projects\Kursach\Kursach\obj\Debug\netcoreapp2.1\Razor\Views\Home\AddUserToProject.g.cshtml.cs

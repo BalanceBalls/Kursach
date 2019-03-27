@@ -10,6 +10,18 @@
     padding-right: 15px;
 }
 
+div.inline {
+    float: right;
+    width:inherit;
+    margin-left: 10px;
+}
+div.inline .first{
+    float: left;
+    width: inherit;
+}
+.clearBoth {
+    clear: both;
+}
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input,
 select,

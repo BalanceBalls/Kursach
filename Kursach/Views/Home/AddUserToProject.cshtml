@@ -1,0 +1,75 @@
+﻿@model Kursach.Models.UsersInProjectsModel
+
+@{
+    //ViewData["Title"] = "AddUserToProject";
+    int proj = int.Parse(ViewData["ProjectId"].ToString());
+    bool skip = false;
+    IList<UsersInProjectsModel> subbed = ViewData["SubscribedUsers"] as IList<UsersInProjectsModel>;
+}
+
+<h2>Управление доступом </h2>
+
+<h4>к проекту @ViewData["ProjectName"]</h4>
+<hr />
+<h4>Выберите пользователей, которым будет доступен данный проект</h4>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SubscribeUsersToProject">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-check">
+                <ul style="max-height: 600px;
+                       margin-bottom: 10px;
+                       overflow:scroll;
+                       -webkit-overflow-scrolling: touch;">
+
+                    @foreach (var user in ViewData["Users"] as IList<UserModel>)
+                    {
+                        <il>
+                           
+                            <span class="glyphicon glyphicon-user">
+                                @foreach (var subbedUser in ViewData["SubscribedUsers"] as IList<UsersInProjectsModel>)
+                                {
+                                    if (subbedUser.UserId == user.Id)
+                                    {
+                                        <input type="checkbox" class="form-check-input" id="exampleCheck1" value="@user.Id" name="userlist" checked>
+                                        <label class="form-check-label" for="exampleCheck1">@user.Email</label>
+                                        skip = true;
+                                     }
+
+
+                                 }
+
+                                @if (skip)
+                                {
+                                    skip = false;
+
+                                }
+                                else
+                                {
+                                    <input type="checkbox" class="form-check-input" id="exampleCheck1" value="@user.Id" name="userlist">
+                                    <label class="form-check-label" for="exampleCheck1">@user.Email</label>
+                                }
+
+                            </span><br />
+                        </il>
+                    }
+                </ul>
+            </div>
+
+
+
+            <div class="form-group">
+                <input asp-for="ProjectId" class="form-control" type="hidden" value=@proj />
+                <input type="submit" value="Обновить настройки доступа" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Вернуться к проектам</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
