@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System;
 namespace Kursach.Models.Repository
 {
     public interface IProjectRepository
@@ -25,5 +25,7 @@ namespace Kursach.Models.Repository
         void RemoveStep(int stepOfDevelopment);
 
         void WriteUsersToProject(int projectId, int userId);
+
+        void WriteNewProject(string ProjectName , double Cost, DateTime Deadline ,int AuthorId);
     }
 }

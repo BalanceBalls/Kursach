@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
-
+using System;
 namespace Kursach.Models.Repository
 {
     public class ProjectRepository : BaseRepository, IProjectRepository
@@ -174,6 +174,35 @@ Where StepOfDevelopment = @{nameof(stepOfDevelopment)}
 ", new { stepOfDevelopment });
             }
         }
-    
+
+        public void WriteNewProject(string ProjectName, double Cost, DateTime Deadline, int AuthorId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+          
+                conn.Execute($@"
+insert into	Projects  (ProjectName, Cost, Deadline, IsDone, AuthorId) 
+values
+(  
+    @{nameof(ProjectName)},
+    @{nameof(Cost)},
+    @{nameof(Deadline)},
+    0,
+    @{nameof(AuthorId)}
+)
+", new { ProjectName, Cost, Deadline, AuthorId });
+                conn.Execute($@"
+insert into UsersInProjects  (ProjectId, UserID) 
+values
+(  
+    (select top 1 Project from Projects
+order by Project desc),
+    @{nameof(AuthorId)}
+   
+)
+", new { AuthorId });
+            }
+        }
     }
 }

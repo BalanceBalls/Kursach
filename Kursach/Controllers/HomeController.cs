@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Kursach.Models.Repository;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using System;
 
 /*Система по ведению учета процесса разработки, включая сроки выполнения,
  * стоимость услуг, этапов разработки (система многопользовательская)*/
@@ -95,6 +96,18 @@ namespace Kursach.Controllers
         public IActionResult Error()
         {
             return NotFound();
+        }
+
+        public IActionResult AddProject()
+        {
+            return View("AddProject");
+        }
+
+        public IActionResult CreateNewProject(string ProjectName, double Cost, DateTime Deadline, int AuthorId)
+        {
+            this._projectRepository.WriteNewProject(ProjectName, Cost, Deadline, AuthorId);
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

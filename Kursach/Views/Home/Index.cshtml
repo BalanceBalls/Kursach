@@ -7,7 +7,32 @@
 <nav class="navbar navbar-light bg-light">
     <span class="navbar-brand mb-0 h1">Количество проектов с вашим участием: <span class="badge badge-primary badge-pill">@Model.Count()</span></span>
 </nav>
+<script>
+    function PopulateSteps(projId) {
+        var activate = document.getElementById("showbutton-" + projId);
+        var deactivate = document.getElementById("hidebutton-" + projId);
 
+        activate.hidden = true;
+        deactivate.hidden = false;
+
+        var t = document.getElementById("stepsdiv");
+        $("#stepsdiv-" + projId).fadeIn("slow");
+       
+}
+function HideSteps(projId) {
+    var activate = document.getElementById("showbutton-" + projId);
+    var deactivate = document.getElementById("hidebutton-" + projId);
+
+
+    activate.hidden = false;
+    deactivate.hidden = true;
+
+        var t = document.getElementById("stepsdiv");
+    $("#stepsdiv-" + projId).fadeOut("slow");
+
+}
+
+</script>
 
 @foreach (var project in Model)
 {
@@ -70,6 +95,7 @@
     </li>
     <li class="list-group-item"><b>Стоимость</b> - @project.Cost $</li>
     <li class="list-group-item"><b>Дедлайн</b> - @project.Deadline.ToShortDateString()</li>
+
     @if (project.IsDone)
     {
         <li class="list-group-item list-group-item-success">Проект завершен</li>
@@ -78,49 +104,69 @@
     {
         <li class="list-group-item list-group-item-danger">Проект находится в разработке</li>
     }
-   
-
+    
+        <li class="list-group-item">
+            <div class="row">
+                <div class="inline" style="margin-right:10px ; font-size: 20px; ">
+                    <a onclick="PopulateSteps(@project.Project)" id="showbutton-@project.Project">
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                    <a onclick="HideSteps(@project.Project)" id="hidebutton-@project.Project" hidden>
+                        <span class="glyphicon glyphicon-chevron-up"></span>
+                    </a>
+                </div>
+                <div class="inline" style="float:left" >
+                    <h5> Данный проект содержит <b>@project.Steps.Count</b> этапа(ов)</h5>
+                </div>
+            </div>
+        </li>
     <br />
-    @foreach (var step in project.Steps)
-    {
-        <ul class="nested">
-            <li class="list-group-item list-group-item-info">
-                <div class="row">
-                    <div class="inline" style="float:left">
-                        <b>Этап: </b> @step.Name
-                    </div>
-                    @if (step.EndDate == DateTime.MinValue)
-                    {
-                        @using (Html.BeginForm("UpdateStepStatus", "Home", FormMethod.Post))
+    <div id="stepsdiv-@project.Project" hidden>
+        @foreach (var step in project.Steps)
+        {
+
+            <ul class="nested">
+                <li class="list-group-item list-group-item-info">
+                    <div class="row">
+                        <div class="inline" style="float:left">
+                            <b>Этап: </b> @step.Name
+                        </div>
+                        @if (step.EndDate == DateTime.MinValue)
                         {
-                    <div class="inline" style="margin-right : 10px">
-                        <input type="hidden" id="stepID" name="stepId" value=@step.StepOfDevelopment>
-                        <input type="submit" class="btn btn-primary" value="Завершить" />
-                    </div>
+                            @using (Html.BeginForm("UpdateStepStatus", "Home", FormMethod.Post))
+                            {
+                                <div class="inline" style="margin-right : 10px">
+                                    <input type="hidden" id="stepID" name="stepId" value=@step.StepOfDevelopment>
+                                    <input type="submit" class="btn btn-primary" value="Завершить" />
+                                </div>
+                            }
                         }
-                    }
-                    @if (project.AuthorId == int.Parse(User.Identity.Name))
-                    {
-                        @using (Html.BeginForm("RemoveStepFromProject", "Home", FormMethod.Post))
+                        @if (project.AuthorId == int.Parse(User.Identity.Name))
                         {
-                            <div class="inline" style="margin-right : 10px">
-                                <input type="hidden" id="stepID" name="stepId" value=@step.StepOfDevelopment>
-                                <button type="submit" class="btn btn-primary" value="Удалить"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-                            </div>
+                            @using (Html.BeginForm("RemoveStepFromProject", "Home", FormMethod.Post))
+                            {
+                                <div class="inline" style="margin-right : 10px">
+                                    <input type="hidden" id="stepID" name="stepId" value=@step.StepOfDevelopment>
+                                    <button type="submit" class="btn btn-primary" value="Удалить"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                </div>
+                            }
                         }
-                    }
-            </li>
-            <li class="list-group-item"><b>Описание:</b> @step.Description</li>
-            @if (step.EndDate != DateTime.MinValue)
-            {
-                <li class="list-group-item list-group-item-success">Этап завершен @step.EndDate.ToShortDateString()</li>
-            }
-            else
-            {
-                <li class="list-group-item list-group-item-danger">Этап в процессе выполнения</li>
-            }
-        </ul>
-        <hr />
-    }
+                </li>
+                <li class="list-group-item"><b>Описание:</b> @step.Description</li>
+                @if (step.EndDate != DateTime.MinValue)
+                {
+                    <li class="list-group-item list-group-item-success">Этап завершен @step.EndDate.ToShortDateString()</li>
+                }
+                else
+                {
+                    <li class="list-group-item list-group-item-danger">Этап в процессе выполнения</li>
+                }
+
+            </ul>
+
+            <hr />
+        }
+    </div>
 </ul>
+
 }
