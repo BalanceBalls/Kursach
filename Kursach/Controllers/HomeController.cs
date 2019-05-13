@@ -11,6 +11,7 @@ using System;
  * стоимость услуг, этапов разработки (система многопользовательская)*/
 namespace Kursach.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IProjectRepository _projectRepository;
@@ -23,7 +24,6 @@ namespace Kursach.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;//получаем ID пользователя из куков

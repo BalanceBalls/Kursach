@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ProjectModel>
 @{
     ViewData["Title"] = "Projects";
-    bool hasSteps = false;
+
 }
 
 <nav class="navbar navbar-light bg-light">
@@ -17,37 +17,39 @@
 
         var t = document.getElementById("stepsdiv");
         $("#stepsdiv-" + projId).fadeIn("slow");
-       
-}
-function HideSteps(projId) {
-    var activate = document.getElementById("showbutton-" + projId);
-    var deactivate = document.getElementById("hidebutton-" + projId);
+
+    }
+    function HideSteps(projId) {
+        var activate = document.getElementById("showbutton-" + projId);
+        var deactivate = document.getElementById("hidebutton-" + projId);
 
 
-    activate.hidden = false;
-    deactivate.hidden = true;
+        activate.hidden = false;
+        deactivate.hidden = true;
 
         var t = document.getElementById("stepsdiv");
-    $("#stepsdiv-" + projId).fadeOut("slow");
+        $("#stepsdiv-" + projId).fadeOut("slow");
 
-}
+    }
 
 </script>
 
 @foreach (var project in Model)
-{
+{  bool hasSteps = false;
+
 <ul class="list-group">
 
 
     <li class="list-group-item active">
 
         @foreach (var st in project.Steps)
-        {
-            if (st.EndDate == DateTime.MinValue)
-            {
-                hasSteps = true;
-            }
-        }
+                    {
+                        if (st.EndDate == DateTime.MinValue)
+                        {
+                            hasSteps = true;
+                            break;
+                        }
+}
 
         <div class="row">
             <div class="inline" style="float:left">
@@ -55,40 +57,40 @@ function HideSteps(projId) {
             </div>
 
             @if (!project.IsDone && project.AuthorId == int.Parse(User.Identity.Name) && !hasSteps)
-            {
-                @using (Html.BeginForm("UpdateProjStatus", "Home", FormMethod.Post))
-                {
+                            {
+            @using (Html.BeginForm("UpdateProjStatus", "Home", FormMethod.Post))
+                                {
 
-                    <div class="inline" style="margin-right: 10px">
-                        <input type="hidden" id="projectID" name="projectId" value=@project.Project>
-                        <input type="submit" class="btn btn-success" value="Завершить проект " />
-                    </div>
-                }
-            }
+            <div class="inline" style="margin-right: 10px" >
+                <input type="hidden" id="projectID" name="projectId" value=@project.Project>
+                <input type="submit" class="btn btn-success" value="Завершить проект " />
+            </div>
+                                }
+                            }
             @if (!project.IsDone)
-            {
-                @using (Html.BeginForm("AddStep", "Home", FormMethod.Post))
-                {
-                    <div class="inline" style="margin-right: 10px">
-                        <input type="hidden" id="projectID" name="projectId" value=@project.Project>
-                        <input type="hidden" id="projectName" name="projectName" value=@project.ProjectName>
-                        <input type="submit" class="btn btn-info" value="Добавить этап " />
-                    </div>
-                }
-            }
+                            {
+            @using (Html.BeginForm("AddStep", "Home", FormMethod.Post))
+                                {
+            <div class="inline" style="margin-right: 10px">
+                <input type="hidden" id="projectID" name="projectId" value=@project.Project>
+                <input type="hidden" id="projectName" name="projectName" value=@project.ProjectName>
+                <input type="submit" class="btn btn-info" value="Добавить этап " />
+            </div>
+                                }
+                            }
 
             @if (!project.IsDone && project.AuthorId == int.Parse(User.Identity.Name))
-            {
-                @using (Html.BeginForm("AddUserView", "Home", FormMethod.Post))
-                {
+                            {
+            @using (Html.BeginForm("AddUserView", "Home", FormMethod.Post))
+                                {
 
-                    <div class="inline" style="margin-right: 10px">
-                        <input type="hidden" id="projectName" name="projectName" value=@project.ProjectName>
-                        <input type="hidden" id="projectID" name="projectId" value=@project.Project>
-                        <input type="submit" class="btn btn-warning" value="Управление доступом " />
-                    </div>
-                }
-            }
+            <div class="inline" style="margin-right: 10px">
+                <input type="hidden" id="projectName" name="projectName" value=@project.ProjectName>
+                <input type="hidden" id="projectID" name="projectId" value=@project.Project>
+                <input type="submit" class="btn btn-warning" value="Управление доступом " />
+            </div>
+                                }
+                            }
         </div>
 
 
@@ -97,75 +99,75 @@ function HideSteps(projId) {
     <li class="list-group-item"><b>Дедлайн</b> - @project.Deadline.ToShortDateString()</li>
 
     @if (project.IsDone)
-    {
-        <li class="list-group-item list-group-item-success">Проект завершен</li>
-    }
-    else
-    {
-        <li class="list-group-item list-group-item-danger">Проект находится в разработке</li>
-    }
-    
-        <li class="list-group-item">
-            <div class="row">
-                <div class="inline" style="margin-right:10px ; font-size: 20px; ">
-                    <a onclick="PopulateSteps(@project.Project)" id="showbutton-@project.Project">
-                        <span class="glyphicon glyphicon-chevron-down"></span>
-                    </a>
-                    <a onclick="HideSteps(@project.Project)" id="hidebutton-@project.Project" hidden>
-                        <span class="glyphicon glyphicon-chevron-up"></span>
-                    </a>
-                </div>
-                <div class="inline" style="float:left" >
-                    <h5> Данный проект содержит <b>@project.Steps.Count</b> этапа(ов)</h5>
-                </div>
+            {
+    <li class="list-group-item list-group-item-success">Проект завершен</li>
+            }
+            else
+            {
+    <li class="list-group-item list-group-item-danger">Проект находится в разработке</li>
+            }
+
+    <li class="list-group-item">
+        <div class="row">
+            <div class="inline" style="margin-right:10px ; font-size: 20px; ">
+                <a onclick="PopulateSteps(@project.Project)" id="showbutton-@project.Project">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+                <a onclick="HideSteps(@project.Project)" id="hidebutton-@project.Project" hidden>
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
             </div>
-        </li>
+            <div class="inline" style="float:left">
+                <h5> Данный проект содержит <b>@project.Steps.Count</b> этапа(ов)</h5>
+            </div>
+        </div>
+    </li>
     <br />
     <div id="stepsdiv-@project.Project" hidden>
         @foreach (var step in project.Steps)
-        {
+                    {
 
-            <ul class="nested">
-                <li class="list-group-item list-group-item-info">
-                    <div class="row">
-                        <div class="inline" style="float:left">
-                            <b>Этап: </b> @step.Name
-                        </div>
-                        @if (step.EndDate == DateTime.MinValue)
-                        {
-                            @using (Html.BeginForm("UpdateStepStatus", "Home", FormMethod.Post))
-                            {
-                                <div class="inline" style="margin-right : 10px">
-                                    <input type="hidden" id="stepID" name="stepId" value=@step.StepOfDevelopment>
-                                    <input type="submit" class="btn btn-primary" value="Завершить" />
-                                </div>
-                            }
-                        }
-                        @if (project.AuthorId == int.Parse(User.Identity.Name))
-                        {
-                            @using (Html.BeginForm("RemoveStepFromProject", "Home", FormMethod.Post))
-                            {
-                                <div class="inline" style="margin-right : 10px">
-                                    <input type="hidden" id="stepID" name="stepId" value=@step.StepOfDevelopment>
-                                    <button type="submit" class="btn btn-primary" value="Удалить"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-                                </div>
-                            }
-                        }
-                </li>
-                <li class="list-group-item"><b>Описание:</b> @step.Description</li>
-                @if (step.EndDate != DateTime.MinValue)
-                {
-                    <li class="list-group-item list-group-item-success">Этап завершен @step.EndDate.ToShortDateString()</li>
-                }
-                else
-                {
-                    <li class="list-group-item list-group-item-danger">Этап в процессе выполнения</li>
-                }
+        <ul class="nested">
+            <li class="list-group-item list-group-item-info">
+                <div class="row">
+                    <div class="inline" style="float:left">
+                        <b>Этап: </b> @step.Name
+                    </div>
+                    @if (step.EndDate == DateTime.MinValue)
+                                                {
+                    @using (Html.BeginForm("UpdateStepStatus", "Home", FormMethod.Post))
+                                                    {
+                    <div class="inline" style="margin-right : 10px">
+                        <input type="hidden" id="stepID" name="stepId" value=@step.StepOfDevelopment>
+                        <input type="submit" class="btn btn-primary" value="Завершить" />
+                    </div>
+                                                    }
+                                                }
+                    @if (project.AuthorId == int.Parse(User.Identity.Name))
+                                                {
+                    @using (Html.BeginForm("RemoveStepFromProject", "Home", FormMethod.Post))
+                                                    {
+                    <div class="inline" style="margin-right : 10px">
+                        <input type="hidden" id="stepID" name="stepId" value=@step.StepOfDevelopment>
+                        <button type="submit" class="btn btn-primary" value="Удалить"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                    </div>
+                                                    }
+                                                }
+            </li>
+            <li class="list-group-item"><b>Описание:</b> @step.Description</li>
+            @if (step.EndDate != DateTime.MinValue)
+                                {
+            <li class="list-group-item list-group-item-success">Этап завершен @step.EndDate.ToShortDateString()</li>
+                                }
+                                else
+                                {
+            <li class="list-group-item list-group-item-danger">Этап в процессе выполнения</li>
+                                }
 
-            </ul>
+        </ul>
 
-            <hr />
-        }
+        <hr />
+                    }
     </div>
 </ul>
 

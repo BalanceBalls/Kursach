@@ -25,13 +25,12 @@ namespace Kursach.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = _accountRepository.GetUser(model);
-                if (user != null)
+                if (user != null && user.Password == model.Password)
                 {
                     await Authenticate(user.Id); // аутентификация
 
